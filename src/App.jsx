@@ -691,7 +691,7 @@ function HomePage({ navigate, adminProps }) {
               Start Consulting
             </button>
           </div>
-          <div className="two-col-grid-equal" style={{ gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+          <div className="two-col-grid-equal" style={{ gap: 20 }}>
             {[
               { icon: "🏆", title: "Award Winning", desc: "Best Real Estate Consultancy 2024" },
               { icon: "⚡", title: "Fast Closings", desc: "Average 18-day deal completion" },
@@ -854,7 +854,7 @@ function DetailPage({ prop, navigate, consultName, setConsultName, consultPhone,
         <button onClick={() => navigate("properties")} style={{ background: "none", border: "none", color: "#9d9080", cursor: "pointer", fontSize: 14, marginBottom: 40, display: "flex", alignItems: "center", gap: 8 }}>
           ← Back to Properties
         </button>
-        <div className="detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 400px", alignItems: "start" }}>
+        <div className="detail-grid">
           <div>
             <div
               style={{ borderRadius: 20, overflow: "hidden", marginBottom: 28, height: 420, cursor: "pointer", position: "relative" }}
@@ -1148,7 +1148,7 @@ function ContactPage() {
           </h1>
           <div className="divider" style={{ margin: "20px auto" }} />
         </div>
-        <div className="two-col-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 60, alignItems: "start" }}>
+        <div className="two-col-grid" style={{ gap: 60, alignItems: "start" }}>
           <div>
             <h2 className="serif" style={{ fontSize: 28, color: "#c9a84c", fontWeight: 600, marginBottom: 24 }}>Our Office</h2>
             <div style={{ display: "flex", gap: 16, marginBottom: 28, alignItems: "center" }}>
@@ -1383,7 +1383,7 @@ function Footer({ navigate }) {
   return (
     <footer style={{ background: "rgba(201,168,76,0.03)", borderTop: "1px solid rgba(201,168,76,0.1)", padding: "72px 32px 40px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <div className="footer-grid" style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))", marginBottom: 32 }}>
+        <div className="footer-grid" style={{ marginBottom: 32 }}>
           {[
             { title: "Contact", links: [["📞 +91 91132 03639",null],["✉️ BangaloreNorthRealestates@gmail.com",null],["📍 Bangalore North",null]] },
             { title: "Follow Us", links: [
