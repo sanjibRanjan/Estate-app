@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import logo from "./assets/companylogo.jpg";
+import youtubeLogo from "./assets/Youtube.png";
+import instagramLogo from "./assets/Instagram.jpeg";
 
 const FONT_LINK = `@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');`;
 
@@ -84,8 +87,6 @@ const properties = [
 ];
 
 const amenities = ["Swimming Pool", "Gym", "24/7 Security", "Power Backup", "Parking", "Garden", "Club House", "CCTV"];
-
-const LOGO_URL = "/assets/494766764_18034870040633846_3882065537929687427_n.jpg";
 
 const styles = `
   ${FONT_LINK}
@@ -491,7 +492,7 @@ function Navbar({ page, navigate, scrolled }) {
     }}>
       <div onClick={() => navigate("home")} style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: 10 }}>
         <img
-          src={LOGO_URL}
+          src={logo}
           alt="Bangalore North Real Estate logo"
           style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }}
         />
@@ -1382,10 +1383,8 @@ function Footer({ navigate }) {
   return (
     <footer style={{ background: "rgba(201,168,76,0.03)", borderTop: "1px solid rgba(201,168,76,0.1)", padding: "72px 32px 40px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <div className="footer-grid" style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))", marginBottom: 40 }}>
+        <div className="footer-grid" style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))", marginBottom: 32 }}>
           {[
-            { title: "Navigate", links: [["Home","home"],["Properties","properties"],["Contact","contact"]] },
-            { title: "Property Types", links: [["Apartments","properties"],["Villas","properties"],["Offices","properties"],["Plots","properties"]] },
             { title: "Contact", links: [["📞 +91 91132 03639",null],["✉️ BangaloreNorthRealestates@gmail.com",null],["📍 Bangalore North",null]] },
             { title: "Follow Us", links: [
               ["YouTube","https://youtube.com/@bangalorenorthrealestate?si=RfoxprZD5p7KGWN1"],
@@ -1399,39 +1398,28 @@ function Footer({ navigate }) {
                   <li key={label} style={{ marginBottom: 10 }}>
                     {pg ? (
                       pg.startsWith('http') ? (
-                        col.title === "Follow Us" && label === "YouTube" ? (
-                          <a
-                            href={pg}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ fontSize: 14, color: "#6b6455", textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}
-                            className="nav-link"
-                          >
-                            <img src="/assets/download.png" alt="YouTube" style={{ width: 18, height: 18, borderRadius: "50%" }} />
-                            <span>YouTube</span>
-                          </a>
-                        ) : col.title === "Follow Us" && label === "Instagram" ? (
-                          <a
-                            href={pg}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ fontSize: 14, color: "#6b6455", textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}
-                            className="nav-link"
-                          >
-                            <img src="/assets/download.jpeg" alt="Instagram" style={{ width: 18, height: 18, borderRadius: "50%" }} />
-                            <span>Instagram</span>
-                          </a>
-                        ) : (
-                          <a
-                            href={pg}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ fontSize: 14, color: "#6b6455", textDecoration: "none" }}
-                            className="nav-link"
-                          >
-                            {label}
-                          </a>
-                        )
+                        <a
+                          href={pg}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ fontSize: 14, color: "#6b6455", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}
+                        >
+                          {label === "YouTube" && (
+                            <img
+                              src={youtubeLogo}
+                              alt="YouTube"
+                              style={{ width: 20, height: 20, objectFit: "contain" }}
+                            />
+                          )}
+                          {label === "Instagram" && (
+                            <img
+                              src={instagramLogo}
+                              alt="Instagram"
+                              style={{ width: 20, height: 20, objectFit: "contain" }}
+                            />
+                          )}
+                          <span>{label}</span>
+                        </a>
                       ) : (
                         <button className="nav-link" onClick={() => navigate(pg)} style={{ fontSize: 14, color: "#6b6455", padding: 0 }}>{label}</button>
                       )
