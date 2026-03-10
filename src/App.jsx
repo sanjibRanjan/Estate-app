@@ -141,6 +141,154 @@ const styles = `
     border: 1px solid rgba(201,168,76,0.15);
   }
 
+  /* Navbar responsiveness */
+  .main-nav {
+    padding: 0 40px;
+  }
+
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: #c9a84c;
+    cursor: pointer;
+  }
+
+  .nav-toggle-bar {
+    width: 20px;
+    height: 2px;
+    background: #c9a84c;
+    margin: 3px 0;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  .nav-mobile-menu {
+    display: none;
+  }
+
+  /* Layout helpers for sections */
+  .section {
+    padding: 100px 40px;
+  }
+
+  .section-narrow {
+    padding: 80px 40px;
+  }
+
+  .two-col-grid {
+    display: grid;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .two-col-grid-equal {
+    display: grid;
+    gap: 60px;
+    align-items: flex-start;
+  }
+
+  .detail-grid {
+    display: grid;
+    gap: 60px;
+    align-items: flex-start;
+  }
+
+  .detail-sidebar {
+    position: sticky;
+    top: 100px;
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .footer-grid {
+    display: grid;
+    gap: 60px;
+  }
+
+  @media (max-width: 1024px) {
+    .section {
+      padding: 80px 24px;
+    }
+    .section-narrow {
+      padding: 60px 24px;
+    }
+    .two-col-grid,
+    .two-col-grid-equal,
+    .detail-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .detail-sidebar {
+      position: static;
+    }
+    .footer-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 40px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .main-nav {
+      padding: 0 16px;
+    }
+    .nav-desktop {
+      display: none;
+    }
+    .nav-toggle {
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 6px;
+    }
+    .nav-mobile-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 16px 18px 12px;
+      background: rgba(10,10,15,0.98);
+      position: fixed;
+      top: 72px;
+      right: 12px;
+      width: min(280px, 80vw);
+      border-radius: 12px;
+      border: 1px solid rgba(201,168,76,0.3);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.6);
+      max-height: calc(100vh - 88px);
+      overflow-y: auto;
+    }
+    .nav-mobile-menu .nav-link {
+      text-align: left;
+      padding: 0;
+      font-size: 14px;
+    }
+    .hero-bg {
+      align-items: flex-start;
+      padding-top: 96px !important;
+    }
+    .section {
+      padding: 60px 16px;
+    }
+    .section-narrow {
+      padding: 40px 16px;
+    }
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .card-hover {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -332,9 +480,8 @@ export default function RealEstateApp() {
 function Navbar({ page, navigate, scrolled }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   return (
-    <nav style={{
+    <nav className="main-nav" style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 900,
-      padding: "0 40px",
       background: scrolled ? "rgba(10,10,15,0.95)" : "transparent",
       backdropFilter: scrolled ? "blur(20px)" : "none",
       borderBottom: scrolled ? "1px solid rgba(201,168,76,0.12)" : "none",
@@ -352,7 +499,7 @@ function Navbar({ page, navigate, scrolled }) {
           Bangalore North<span style={{ color: "#a68e3c" }}> Real Estate</span>
         </span>
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
+      <div className="nav-desktop">
         {["home","properties","contact"].map(p => (
           <button key={p} className={`nav-link ${page === p ? "active" : ""}`} onClick={() => navigate(p)}>
             {p.charAt(0).toUpperCase() + p.slice(1)}
@@ -369,6 +516,73 @@ function Navbar({ page, navigate, scrolled }) {
         </a>
         <button className="nav-link" onClick={() => navigate("admin")} style={{ fontSize: 12, opacity: 0.5 }}>Admin</button>
       </div>
+      <button
+        className="nav-toggle"
+        aria-label="Toggle navigation menu"
+        onClick={() => setMobileOpen(!mobileOpen)}
+      >
+        <div
+          className="nav-toggle-bar"
+          style={mobileOpen ? { transform: "translateY(5px) rotate(45deg)" } : {}}
+        />
+        <div
+          className="nav-toggle-bar"
+          style={mobileOpen ? { opacity: 0 } : {}}
+        />
+        <div
+          className="nav-toggle-bar"
+          style={mobileOpen ? { transform: "translateY(-5px) rotate(-45deg)" } : {}}
+        />
+      </button>
+      {mobileOpen && (
+        <>
+          {/* Click-away overlay */}
+          <div
+            onClick={() => setMobileOpen(false)}
+            style={{
+              position: "fixed",
+              inset: 0,
+              top: 72,
+              background: "transparent",
+              zIndex: 901,
+            }}
+          />
+          <div className="nav-mobile-menu" style={{ zIndex: 902 }}>
+            {["home","properties","contact"].map(p => (
+              <button
+                key={p}
+                className={`nav-link ${page === p ? "active" : ""}`}
+                style={{ textAlign: "left" }}
+                onClick={() => {
+                  navigate(p);
+                  setMobileOpen(false);
+                }}
+              >
+                {p.charAt(0).toUpperCase() + p.slice(1)}
+              </button>
+            ))}
+            <a
+              href="https://wa.me/919113203639"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-gold"
+              style={{ padding: "10px 18px", borderRadius: 6, fontSize: 13, marginTop: 4, textAlign: "center" }}
+            >
+              Book Consultation
+            </a>
+            <button
+              className="nav-link"
+              style={{ fontSize: 12, opacity: 0.6, marginTop: 4, textAlign: "left" }}
+              onClick={() => {
+                navigate("admin");
+                setMobileOpen(false);
+              }}
+            >
+              Admin
+            </button>
+          </div>
+        </>
+      )}
     </nav>
   );
 }
@@ -385,7 +599,17 @@ function HomePage({ navigate, adminProps }) {
   return (
     <div>
       {/* Hero */}
-      <div className="hero-bg" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "0 24px" }}>
+      <div
+        className="hero-bg"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          padding: "120px 24px 40px",
+        }}
+      >
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 70%, rgba(201,168,76,0.08) 0%, transparent 60%)" }} />
         <div style={{ position: "relative", zIndex: 2, maxWidth: 820 }}>
           <div className="fade-up" style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 24, padding: "6px 18px", borderRadius: 20, border: "1px solid rgba(201,168,76,0.3)", background: "rgba(201,168,76,0.06)" }}>
@@ -432,7 +656,7 @@ function HomePage({ navigate, adminProps }) {
       </div>
 
       {/* Featured */}
-      <div style={{ padding: "100px 40px", maxWidth: 1280, margin: "0 auto" }}>
+      <div className="section" style={{ maxWidth: 1280, margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 60, flexWrap: "wrap", gap: 20 }}>
           <div>
             <p style={{ fontSize: 12, letterSpacing: "0.2em", color: "#c9a84c", textTransform: "uppercase", marginBottom: 12 }}>Handpicked Selection</p>
@@ -444,7 +668,7 @@ function HomePage({ navigate, adminProps }) {
             View All Properties →
           </button>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 28 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 28 }}>
           {adminProps.slice(0, 3).map((p, i) => (
             <PropertyCard key={p.id} prop={p} navigate={navigate} delay={i * 100} />
           ))}
@@ -452,8 +676,8 @@ function HomePage({ navigate, adminProps }) {
       </div>
 
       {/* Why Us */}
-      <div style={{ background: "rgba(201,168,76,0.03)", borderTop: "1px solid rgba(201,168,76,0.08)", borderBottom: "1px solid rgba(201,168,76,0.08)", padding: "100px 40px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
+      <div style={{ background: "rgba(201,168,76,0.03)", borderTop: "1px solid rgba(201,168,76,0.08)", borderBottom: "1px solid rgba(201,168,76,0.08)" }} className="section">
+        <div className="two-col-grid" style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div>
             <p style={{ fontSize: 12, letterSpacing: "0.2em", color: "#c9a84c", textTransform: "uppercase", marginBottom: 12 }}>Our Difference</p>
             <h2 className="serif" style={{ fontSize: "clamp(34px,4vw,52px)", fontWeight: 300, lineHeight: 1.2, marginBottom: 28, color: "#a68e3c" }}>
@@ -466,7 +690,7 @@ function HomePage({ navigate, adminProps }) {
               Start Consulting
             </button>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+          <div className="two-col-grid-equal" style={{ gridTemplateColumns: "1fr 1fr", gap: 20 }}>
             {[
               { icon: "🏆", title: "Award Winning", desc: "Best Real Estate Consultancy 2024" },
               { icon: "⚡", title: "Fast Closings", desc: "Average 18-day deal completion" },
@@ -484,12 +708,12 @@ function HomePage({ navigate, adminProps }) {
       </div>
 
       {/* Testimonials */}
-      <div style={{ padding: "100px 40px", maxWidth: 1100, margin: "0 auto" }}>
+      <div className="section" style={{ maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 60 }}>
           <p style={{ fontSize: 12, letterSpacing: "0.2em", color: "#c9a84c", textTransform: "uppercase", marginBottom: 12 }}>Client Stories</p>
           <h2 className="serif" style={{ fontSize: "clamp(34px,4vw,52px)", fontWeight: 300, color: "#a68e3c" }}>What Our Clients Say</h2>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 28 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 28 }}>
           {[
             { quote: "Bangalore North Real Estate found us our dream penthouse in 3 weeks. Their market knowledge is unparalleled.", name: "Riya Sharma", city: "Mumbai", stars: 5 },
             { quote: "Professional, transparent, and incredibly efficient. Best real estate experience we've ever had.", name: "Arjun Mehta", city: "Bangalore", stars: 5 },
@@ -526,7 +750,7 @@ function HomePage({ navigate, adminProps }) {
 function PropertiesPage({ navigate, filtered, filter, setFilter }) {
   return (
     <div style={{ paddingTop: 100, minHeight: "100vh" }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "60px 40px" }}>
+      <div className="section-narrow" style={{ maxWidth: 1280, margin: "0 auto" }}>
         <div style={{ marginBottom: 56, textAlign: "center" }}>
           <p style={{ fontSize: 12, letterSpacing: "0.2em", color: "#c9a84c", textTransform: "uppercase", marginBottom: 12 }}>Browse All</p>
           <h1 className="serif" style={{ fontSize: "clamp(40px,6vw,70px)", fontWeight: 300, color: "#f0ebe0" }}>
@@ -542,7 +766,7 @@ function PropertiesPage({ navigate, filtered, filter, setFilter }) {
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", padding: "80px 0", color: "#6b6455" }}>No properties found for this filter.</div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(340px,1fr))", gap: 28 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 28 }}>
             {filtered.map((p, i) => <PropertyCard key={p.id} prop={p} navigate={navigate} delay={i * 80} />)}
           </div>
         )}
@@ -625,11 +849,11 @@ function DetailPage({ prop, navigate, consultName, setConsultName, consultPhone,
 
   return (
     <div style={{ paddingTop: 90, minHeight: "100vh" }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "60px 40px" }}>
+      <div className="section-narrow" style={{ maxWidth: 1100, margin: "0 auto" }}>
         <button onClick={() => navigate("properties")} style={{ background: "none", border: "none", color: "#9d9080", cursor: "pointer", fontSize: 14, marginBottom: 40, display: "flex", alignItems: "center", gap: 8 }}>
           ← Back to Properties
         </button>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 400px", gap: 60, alignItems: "start" }}>
+        <div className="detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 400px", alignItems: "start" }}>
           <div>
             <div
               style={{ borderRadius: 20, overflow: "hidden", marginBottom: 28, height: 420, cursor: "pointer", position: "relative" }}
@@ -770,7 +994,7 @@ function DetailPage({ prop, navigate, consultName, setConsultName, consultPhone,
               </div>
             </div>
           </div>
-          <div style={{ position: "sticky", top: 100 }}>
+          <div className="detail-sidebar">
             <div className="glass" style={{ borderRadius: 20, padding: 32, border: "1px solid rgba(201,168,76,0.2)" }}>
               {!submitted ? (
                 <>
@@ -915,7 +1139,7 @@ function ContactPage() {
   const [done, setDone] = useState(false);
   return (
     <div style={{ paddingTop: 100, minHeight: "100vh" }}>
-      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "80px 40px" }}>
+      <div className="section-narrow" style={{ maxWidth: 1000, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 72 }}>
           <p style={{ fontSize: 12, letterSpacing: "0.2em", color: "#c9a84c", textTransform: "uppercase", marginBottom: 12 }}>Get In Touch</p>
           <h1 className="serif" style={{ fontSize: "clamp(40px,6vw,68px)", fontWeight: 300, color: "#f0ebe0" }}>
@@ -923,7 +1147,7 @@ function ContactPage() {
           </h1>
           <div className="divider" style={{ margin: "20px auto" }} />
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 60, alignItems: "start" }}>
+        <div className="two-col-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 60, alignItems: "start" }}>
           <div>
             <h2 className="serif" style={{ fontSize: 28, color: "#c9a84c", fontWeight: 600, marginBottom: 24 }}>Our Office</h2>
             <div style={{ display: "flex", gap: 16, marginBottom: 28, alignItems: "center" }}>
@@ -1065,8 +1289,8 @@ function AdminPage({ adminLoggedIn, setAdminLoggedIn, adminPassword, setAdminPas
   );
   return (
     <div style={{ paddingTop: 100, minHeight: "100vh" }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "60px 40px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 48, flexWrap: "wrap", gap: 20 }}>
+      <div className="section-narrow" style={{ maxWidth: 1100, margin: "0 auto" }}>
+        <div className="admin-header" style={{ marginBottom: 48 }}>
           <div>
             <h1 className="serif" style={{ fontSize: 42, color: "#f0ebe0", fontWeight: 400 }}>Admin <em style={{ color: "#c9a84c" }}>Dashboard</em></h1>
             <p style={{ color: "#6b6455", marginTop: 6 }}>{adminProps.length} properties listed</p>
@@ -1156,17 +1380,9 @@ function AdminPage({ adminLoggedIn, setAdminLoggedIn, adminPassword, setAdminPas
 
 function Footer({ navigate }) {
   return (
-    <footer style={{ background: "rgba(201,168,76,0.03)", borderTop: "1px solid rgba(201,168,76,0.1)", padding: "72px 40px 40px" }}>
+    <footer style={{ background: "rgba(201,168,76,0.03)", borderTop: "1px solid rgba(201,168,76,0.1)", padding: "72px 32px 40px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr", gap: 60, marginBottom: 60 }}>
-          <div>
-            <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, fontWeight: 600, color: "#a68e3c", marginBottom: 16 }}>
-              Bangalore North<span style={{ color: "#a68e3c" }}> Real Estate</span>
-            </div>
-            <p style={{ color: "#6b6455", fontSize: 14, lineHeight: 1.7, maxWidth: 260 }}>
-              Premium real estate consulting for discerning clients across India's finest addresses.
-            </p>
-          </div>
+        <div className="footer-grid" style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))", marginBottom: 40 }}>
           {[
             { title: "Navigate", links: [["Home","home"],["Properties","properties"],["Contact","contact"]] },
             { title: "Property Types", links: [["Apartments","properties"],["Villas","properties"],["Offices","properties"],["Plots","properties"]] },
